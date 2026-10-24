@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Bot No Fitur API — Docs Drizzev</title>
+  <meta name="description" content="Dokumentasi API Bot No Fitur (gaya Whapi) — DrizzEv JadiBot. Hantar mesej WhatsApp melalui HTTP API." />
+  <meta property="og:title" content="Bot No Fitur API — Docs Drizzev" />
+  <meta property="og:description" content="Dokumentasi API untuk Bot No Fitur. Claim, sambung WhatsApp, hantar mesej via API key." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#f7fbf8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f7fbf8;
+      --bg-card: #ffffff;
+      --text: #1a2e1f;
+      --muted: #5c7264;
+      --green: #16a34a;
+      --green-soft: #dcfce7;
+      --green-border: #bbf7d0;
+      --border: #e5eee8;
+      --code-bg: #0f172a;
+      --code-text: #e2e8f0;
+      --radius: 14px;
+      --font: "Inter", system-ui, -apple-system, sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --nav-h: 56px;
+      --side-w: 240px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+    a { color: var(--green); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* —— Nav —— */
+    .nav {
+      position: sticky; top: 0; z-index: 100;
+      height: var(--nav-h);
+      background: rgba(247, 251, 248, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 1rem;
+      gap: 0.5rem;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-weight: 800; color: var(--text); text-decoration: none;
+      font-size: 1rem; white-space: nowrap;
+    }
+    .logo span.g { color: var(--green); }
+    .badge {
+      font-size: 0.65rem; font-weight: 700; letter-spacing: 0.04em;
+      padding: 0.2rem 0.55rem; border-radius: 999px;
+      background: var(--green-soft); color: var(--green);
+      border: 1px solid var(--green-border);
+      white-space: nowrap;
+    }
+    .nav-right { display: flex; align-items: center; gap: 0.6rem; }
+    .nav-right a.panel-link {
+      color: var(--muted); font-weight: 600; font-size: 0.85rem;
+      text-decoration: none; display: none;
+    }
+    .nav-right a.panel-link:hover { color: var(--green); }
+    .menu-btn {
+      display: none;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 10px;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      cursor: pointer; font-size: 1.2rem;
+    }
+
+    /* —— Layout —— */
+    .layout {
+      display: grid;
+      grid-template-columns: var(--side-w) 1fr;
+      max-width: 1100px;
+      margin: 0 auto;
+      min-height: calc(100vh - var(--nav-h));
+    }
+    .sidebar {
+      padding: 1.25rem 0.85rem 2rem;
+      border-right: 1px solid var(--border);
+      position: sticky; top: var(--nav-h); align-self: start;
+      max-height: calc(100vh - var(--nav-h));
+      max-height: calc(100dvh - var(--nav-h));
+      overflow-y: auto;
+      background: var(--bg);
+    }
+    .sidebar h4 {
+      font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--muted); margin: 0.9rem 0 0.4rem 0.4rem; font-weight: 700;
+    }
+    .sidebar a {
+      display: block; padding: 0.45rem 0.65rem; border-radius: 8px;
+      color: var(--text); font-size: 0.88rem; font-weight: 500;
+      text-decoration: none; margin-bottom: 0.1rem;
+    }
+    .sidebar a:hover, .sidebar a:focus {
+      background: var(--green-soft); color: var(--green); text-decoration: none;
+    }
+
+    .content {
+      padding: 1.75rem 1.5rem 3.5rem;
+      max-width: 720px;
+      width: 100%;
+    }
+    .pill {
+      display: inline-block; font-size: 0.7rem; font-weight: 700;
+      padding: 0.28rem 0.7rem; border-radius: 999px;
+      background: var(--green-soft); color: var(--green); margin-bottom: 0.9rem;
+    }
+    .hero-docs { margin-bottom: 2rem; }
+    .hero-docs h1 {
+      font-size: clamp(1.55rem, 5vw, 2.35rem);
+      font-weight: 800; letter-spacing: -0.03em; line-height: 1.2;
+      margin-bottom: 0.65rem;
+    }
+    .hero-docs h1 .g { color: var(--green); }
+    .hero-docs p { color: var(--muted); font-size: clamp(0.95rem, 2.5vw, 1.05rem); }
+
+    h2 {
+      font-size: clamp(1.15rem, 3vw, 1.35rem);
+      font-weight: 800; margin: 2rem 0 0.65rem;
+      padding-top: 0.35rem; scroll-margin-top: calc(var(--nav-h) + 12px);
+    }
+    h3 { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 0.45rem; }
+    p { margin-bottom: 0.8rem; font-size: 0.95rem; }
+    .muted { color: var(--muted); }
+    ul, ol { margin: 0.45rem 0 0.9rem 1.2rem; font-size: 0.95rem; }
+    li { margin-bottom: 0.3rem; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.1rem;
+      margin: 0.9rem 0;
+      box-shadow: 0 4px 20px rgba(15, 40, 25, 0.04);
+    }
+    .card.warn { border-color: #fde68a; background: #fffbeb; }
+    .card.ok { border-color: var(--green-border); background: #f0fdf4; }
+
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0.9rem 0; border-radius: 12px; border: 1px solid var(--border); }
+    table {
+      width: 100%; min-width: 320px; border-collapse: collapse; font-size: 0.88rem;
+      background: var(--bg-card);
+    }
+    th, td { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); }
+    th { background: #f0f7f2; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+    tr:last-child td { border-bottom: none; }
+
+    code {
+      font-family: var(--mono); font-size: 0.84em;
+      background: #eef6f0; color: #166534;
+      padding: 0.1rem 0.3rem; border-radius: 5px;
+      word-break: break-word;
+    }
+    pre {
+      background: var(--code-bg); color: var(--code-text);
+      border-radius: 12px; padding: 0.9rem 1rem;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      font-family: var(--mono); font-size: 0.78rem;
+      line-height: 1.5; margin: 0.75rem 0 1rem;
+      max-width: 100%;
+    }
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; word-break: normal; }
+    .method {
+      display: inline-block; font-size: 0.68rem; font-weight: 800;
+      padding: 0.12rem 0.4rem; border-radius: 5px; margin-right: 0.35rem;
+    }
+    .method.get { background: #dbeafe; color: #1d4ed8; }
+    .method.post { background: var(--green-soft); color: #15803d; }
+
+    .footer {
+      text-align: center; padding: 1.5rem 1rem;
+      border-top: 1px solid var(--border); color: var(--muted); font-size: 0.82rem;
+      background: #fff;
+    }
+
+    /* —— Overlay mobile sidebar —— */
+    .side-backdrop {
+      display: none;
+      position: fixed; inset: 0; z-index: 90;
+      background: rgba(15, 30, 20, 0.35);
+    }
+    .side-backdrop.show { display: block; }
+
+    /* —— Tablet / Phone —— */
+    @media (max-width: 860px) {
+      .menu-btn { display: inline-flex; }
+      .nav-right a.panel-link { display: none; }
+      .layout { grid-template-columns: 1fr; }
+      .sidebar {
+        position: fixed;
+        top: var(--nav-h); left: 0; bottom: 0;
+        width: min(280px, 85vw);
+        z-index: 95;
+        transform: translateX(-105%);
+        transition: transform 0.22s ease;
+        border-right: 1px solid var(--border);
+        box-shadow: 8px 0 30px rgba(0,0,0,0.08);
+        max-height: none;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .content {
+        padding: 1.25rem 1rem 3rem;
+        max-width: 100%;
+      }
+    }
+    @media (min-width: 861px) {
+      .nav-right a.panel-link { display: inline; }
+      .menu-btn { display: none !important; }
+      .side-backdrop { display: none !important; }
+    }
+    @media (max-width: 400px) {
+      .badge { display: none; }
+      pre { font-size: 0.72rem; padding: 0.75rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="logo" href="#">Docs <span class="g">Drizzev</span></a>
+    <div class="nav-right">
+      <span class="badge">DOCUMENTATION</span>
+      <a class="panel-link" href="https://bot.drizzev.web.id" target="_blank" rel="noopener">Panel Bot</a>
+      <button type="button" class="menu-btn" id="menu-btn" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+
+  <div class="side-backdrop" id="backdrop"></div>
+
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <h4>Pengenalan</h4>
+      <a href="#intro">Apa itu Bot No Fitur</a>
+      <a href="#beza">Beza Fitur vs API</a>
+      <a href="#mula">Mula cepat</a>
+      <h4>API</h4>
+      <a href="#auth">Authentication</a>
+      <a href="#send">POST /api/v1/send</a>
+      <a href="#status">GET /api/v1/status</a>
+      <a href="#errors">Kod ralat</a>
+      <h4>Contoh</h4>
+      <a href="#curl">cURL</a>
+      <a href="#js">JavaScript</a>
+      <a href="#php">PHP</a>
+      <h4>Lain</h4>
+      <a href="#panel">Panel &amp; API key</a>
+      <a href="#had">Had &amp; nota</a>
+      <h4>Pautan</h4>
+      <a href="https://bot.drizzev.web.id" target="_blank" rel="noopener">Buka Panel Bot</a>
+    </aside>
+
+    <main class="content">
+      <div class="hero-docs">
+        <div class="pill">DRIZZEV · BOT NO FITUR API</div>
+        <h1>Dokumentasi <span class="g">Bot No Fitur</span></h1>
+        <p>
+          API HTTP untuk hantar mesej WhatsApp tanpa command bot.
+          Gaya ringkas seperti Whapi — satu API key, hantar teks ke nombor.
+        </p>
+      </div>
+
+      <h2 id="intro">Apa itu Bot No Fitur?</h2>
+      <p>
+        <strong>Bot No Fitur</strong> ialah jenis bot dalam panel
+        <a href="https://bot.drizzev.web.id" target="_blank" rel="noopener">bot.drizzev.web.id</a>
+        yang <em>tidak</em> menjalankan command (.menu, stiker, download, dll.).
+        Ia hanya menyambung WhatsApp dan mendedahkan <strong>API key</strong>
+        supaya sistem anda boleh hantar mesej melalui HTTP.
+      </p>
+      <div class="card ok">
+        Sesuai untuk: notifikasi order, OTP, bot CRM, integrasi website / server sendiri.
+      </div>
+
+      <h2 id="beza">Beza Bot Fitur vs Bot No Fitur</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th></th><th>Bot Fitur</th><th>Bot No Fitur (API)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Command (.menu, dll.)</td><td>Ada</td><td>Tiada</td></tr>
+            <tr><td>API key</td><td>Tidak</td><td>Ada (Console panel)</td></tr>
+            <tr><td>Hantar mesej</td><td>Dari chat WA</td><td>Dari HTTP API</td></tr>
+            <tr><td>Sambungan QR / Pairing</td><td>Ya</td><td>Ya</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="mula">Mula cepat</h2>
+      <ol>
+        <li>Login di <a href="https://bot.drizzev.web.id" target="_blank" rel="noopener">panel</a></li>
+        <li>Claim kod 6 digit → pilih <strong>Bot No Fitur (API)</strong></li>
+        <li>Buka panel bot → tab <strong>Sambungan</strong> → QR atau Pairing</li>
+        <li>Tunggu status <code>running</code></li>
+        <li>Tab <strong>Console</strong> → salin <strong>API key</strong></li>
+        <li>Panggil <code>POST /api/v1/send</code></li>
+      </ol>
+
+      <h2 id="auth">Authentication</h2>
+      <p>Setiap request API mesti bawa API key:</p>
+      <pre><code>Authorization: Bearer drizz_xxxxxxxx...</code></pre>
+      <p>Atau header alternatif:</p>
+      <pre><code>X-Api-Key: drizz_xxxxxxxx...</code></pre>
+      <div class="card warn">
+        Jangan kongsi API key di tempat awam. Sesiapa yang ada key boleh hantar mesej atas nama bot anda.
+      </div>
+
+      <h2 id="send">POST /api/v1/send</h2>
+      <p><span class="method post">POST</span> <code>{BASE_URL}/api/v1/send</code></p>
+      <p><code>BASE_URL</code> = URL panel, contoh <code>https://bot.drizzev.web.id</code></p>
+
+      <h3>Headers</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Header</th><th>Nilai</th></tr></thead>
+          <tbody>
+            <tr><td><code>Authorization</code></td><td><code>Bearer &lt;api_key&gt;</code></td></tr>
+            <tr><td><code>Content-Type</code></td><td><code>application/json</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Body (JSON)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Field</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            <tr><td><code>to</code></td><td>Ya</td><td>Nombor (contoh <code>60123456789</code>)</td></tr>
+            <tr><td><code>message</code></td><td>Ya*</td><td>Teks mesej</td></tr>
+            <tr><td><code>text</code></td><td>Ya*</td><td>Alias untuk <code>message</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted">* Salah satu <code>message</code> atau <code>text</code> diperlukan.</p>
+
+      <h3>Contoh body</h3>
+      <pre><code>{
+  "to": "60123456789",
+  "message": "Hello dari DrizzEv API"
+}</code></pre>
+
+      <h3>Response berjaya</h3>
+      <pre><code>{
+  "ok": true,
+  "job_id": "a1b2c3d4e5f6",
+  "status": "queued"
+}</code></pre>
+
+      <h2 id="status">GET /api/v1/status</h2>
+      <p><span class="method get">GET</span> <code>{BASE_URL}/api/v1/status</code></p>
+      <pre><code>Authorization: Bearer drizz_xxxxxxxx...</code></pre>
+      <h3>Response</h3>
+      <pre><code>{
+  "ok": true,
+  "status": "running",
+  "phone": "60123456789",
+  "expires_at": "2026-11-24T00:00:00.000Z",
+  "mode": "api"
+}</code></pre>
+
+      <h2 id="errors">Kod ralat</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>HTTP</th><th>Maksud</th></tr></thead>
+          <tbody>
+            <tr><td>400</td><td>Body tidak sah</td></tr>
+            <tr><td>401</td><td>API key tiada / tidak sah</td></tr>
+            <tr><td>403</td><td>Bukan bot API / langganan tamat</td></tr>
+            <tr><td>503</td><td>Bot belum online</td></tr>
+            <tr><td>500</td><td>Ralat server</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="curl">Contoh cURL</h2>
+      <pre><code>curl -X POST "https://bot.drizzev.web.id/api/v1/send" \
+  -H "Authorization: Bearer drizz_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"to":"60123456789","message":"Hello"}'</code></pre>
+
+      <h2 id="js">Contoh JavaScript</h2>
+      <pre><code>const res = await fetch("https://bot.drizzev.web.id/api/v1/send", {
+  method: "POST",
+  headers: {
+    "Authorization": "Bearer drizz_YOUR_KEY",
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+    to: "60123456789",
+    message: "Hello dari Node",
+  }),
+});
+const data = await res.json();
+console.log(data);</code></pre>
+
+      <h2 id="php">Contoh PHP</h2>
+      <pre><code>$ch = curl_init("https://bot.drizzev.web.id/api/v1/send");
+curl_setopt_array($ch, [
+  CURLOPT_POST => true,
+  CURLOPT_HTTPHEADER => [
+    "Authorization: Bearer drizz_YOUR_KEY",
+    "Content-Type: application/json",
+  ],
+  CURLOPT_POSTFIELDS => json_encode([
+    "to" => "60123456789",
+    "message" => "Hello dari PHP",
+  ]),
+  CURLOPT_RETURNTRANSFER => true,
+]);
+echo curl_exec($ch);</code></pre>
+
+      <h2 id="panel">Panel &amp; API key</h2>
+      <p>Selepas claim <strong>Bot No Fitur</strong>, buka panel → tab <strong>Console</strong>:</p>
+      <ul>
+        <li>API key + butang <strong>Salin</strong></li>
+        <li>Contoh request</li>
+        <li>Log aktiviti</li>
+      </ul>
+
+      <h2 id="had">Had &amp; nota</h2>
+      <ul>
+        <li>Bot mesti <code>running</code> sebelum <code>/send</code> berjaya.</li>
+        <li>Nombor <code>to</code> tanpa <code>+</code> (contoh MY: <code>60…</code>).</li>
+        <li>Versi semasa: hantar <strong>teks</strong> sahaja.</li>
+        <li>Panel: <a href="https://bot.drizzev.web.id">bot.drizzev.web.id</a></li>
+      </ul>
+
+      <div class="card" style="margin-top:1.75rem">
+        <strong>Code · Create · Build Better</strong>
+        <p class="muted" style="margin:0.35rem 0 0">DrizzEv · Bot No Fitur API Docs</p>
+      </div>
+    </main>
+  </div>
+
+  <footer class="footer">
+    Docs Drizzev · Responsif telefon &amp; PC · Berasingan dari panel bot
+  </footer>
+
+  <script>
+    (function () {
+      var btn = document.getElementById('menu-btn');
+      var side = document.getElementById('sidebar');
+      var back = document.getElementById('backdrop');
+      function close() {
+        side.classList.remove('open');
+        back.classList.remove('show');
+      }
+      function toggle() {
+        side.classList.toggle('open');
+        back.classList.toggle('show');
+      }
+      btn && btn.addEventListener('click', toggle);
+      back && back.addEventListener('click', close);
+      side && side.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', close);
+      });
+    })();
+  </script>
+</body>
+</html>
